@@ -25,8 +25,7 @@ from pyspark.sql.functions import udf
 from pyspark.sql import SparkSession
 def get_rating_data():
     return sc.textFile("%s/ml-100k/u.data" % PATH)
-def get_movie_data():
-    return sc.textFile("%s/ml-100k/u.item" % PATH)
+
 def get_user_data():
     custom_schema = StructType([
         StructField("no", StringType(), True),
