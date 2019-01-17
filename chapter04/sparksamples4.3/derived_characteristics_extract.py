@@ -98,3 +98,24 @@ timestamps_df.show()
 # timestamps = rating_df.select('timestamp')
 # hour_of_day = timestamps.map(lambda ts: extract_datetime(ts).hour) 
 # hour_of_day.take(5)
+#将点钟数转换为时间段
+def assignTod(hour):
+    if(hour>=7 and hour<12):
+        return "morning"
+    elif(hour>=12 and hour<14):
+        return "lunch"
+    elif(hour>=14 and hour<18):
+        return "afternoon"
+    elif(hour>=18 and hour<23):
+        return "evening"
+    elif(hour>=23 and hour<=24):
+        return "night"
+    elif(hour<7):
+        return "night"
+    else:
+        return "error"
+timestamps_df.createOrReplaceTempView("time_df")        
+spark.udf.register("assignTod", assignTod) 
+tod_df=spark.sql("select assignTod(hour) as tod from time_df")
+tod_df.show()       
+        
