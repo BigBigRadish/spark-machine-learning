@@ -9,11 +9,11 @@ Jiangxi university of finance and economics
 import os
 import sys
 from pyspark.mllib.linalg import DenseVector
-from pyspark.ml.feature import OneHotEncoder
 PATH = "/home/agnostic/Workspaces/MyEclipseCI/Spark-machine-learning/chapter04/data"
 from pyspark import SparkContext
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
+from pyspark.ml import Pipeline
 conf = SparkConf().setAppName("Spark App").setMaster("local")#默认分配线程
 
 sc = SparkContext(conf=conf)
@@ -86,16 +86,25 @@ occupation_df.sort('occupation').show()
 occupation_df_collect=occupation_df.collect()
 print(occupation_df_collect)
 cols=occupation_df.columns
-all_occupation_dict={}
-j=0
-for i in occupation_df_collect:#这是一个二维数组
-    print(i[0])
-    all_occupation_dict[str(i[0])]=str(j)
-    j+=1
-print(all_occupation_dict['doctor'])
-k=len(all_occupation_dict)
-binary_x=DenseVector(0)
-print(binary_x)
+# all_occupation_dict={}
+# j=0
+# for i in occupation_df_collect:#这是一个二维数组
+#     print(i[0])
+#     all_occupation_dict[str(i[0])]=str(j)
+#     j+=1
+# print(all_occupation_dict['doctor'])
+# k=len(all_occupation_dict)
+# binary_x=DenseVector(0)
+# print(binary_x)
+#spark onehot
+from pyspark.ml.feature import OneHotEncoder 
+from pyspark.ml.feature import StringIndexer 
+stringindexer = StringIndexer(inputCol='occupation', outputCol='onehot_feature') 
+encoder = OneHotEncoder(dropLast=False,inputCol='onehot_feature', outputCol='onehot_test') 
+pipeline = Pipeline(stages=[stringindexer, encoder]) 
+pipeline_fit = pipeline.fit(occupation_df) 
+df = pipeline_fit.transform(occupation_df)
+df.show()
 
 
 
