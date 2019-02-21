@@ -159,7 +159,7 @@ RandomForest Alogrithm
 from pyspark.ml.classification import RandomForestClassifier 
 # 创建RFC实例对象 
 rfc = RandomForestClassifier(labelCol='label', featuresCol='features', numTrees=10, featureSubsetStrategy="auto", maxDepth=5, maxBins=32, impurity="gini") 
-help(RandomForestClassifier) 
+help(RandomForestClassifier) #help获取模型的完整参数详情，以及模型的详情
 # 创建Pipeline实例对象 
 rfc_pipeline = Pipeline(stages=[string_indexer, one_hot_encoder, vector_assembler, rfc]) 
 # 训练--预测--评估
